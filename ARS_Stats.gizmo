@@ -1,0 +1,145 @@
+#! C:/Program Files/Nuke15.1v4/nuke-15.1.4.dll -nx
+version 15.1 v4
+Gizmo {
+ tile_color 0x5b00ff
+ note_font "Bitstream Vera Sans Bold"
+ note_font_size 15
+ addUserKnob {20 Arnold_Render_Samples_Stats l "Arnold Render Samples Stats"}
+ addUserKnob {1 mindiffu l Min_Diffuse +INVISIBLE}
+ mindiffu "\[expr int((\[metadata exr/arnold/diffuse_samples]*\[metadata exr/arnold/diffuse_samples])*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples])]"
+ addUserKnob {1 minspec l Min_Scecular +INVISIBLE}
+ minspec "\[expr int((\[metadata exr/arnold/specular_samples]*\[metadata exr/arnold/specular_samples])*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples])]"
+ addUserKnob {1 mintr l Min_Transmisson +INVISIBLE}
+ mintr "\[expr int((\[metadata exr/arnold/transmission_samples]*\[metadata exr/arnold/transmission_samples])*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples])]"
+ addUserKnob {1 tsamplesmin l "Total Samples Min" +INVISIBLE}
+ tsamplesmin "\[expr int(\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples] + \[metadata exr/arnold/diffuse_samples]*\[metadata exr/arnold/diffuse_samples]*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples] + \[metadata exr/arnold/specular_samples]*\[metadata exr/arnold/specular_samples]*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples] + \[metadata exr/arnold/transmission_samples]*\[metadata exr/arnold/transmission_samples]*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples])]"
+ addUserKnob {1 tsamplesmax l "Total Samples Max" +INVISIBLE}
+ tsamplesmax "\[expr int((\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples]) + ((\[metadata exr/arnold/diffuse_samples]*\[metadata exr/arnold/diffuse_samples]+\[metadata exr/arnold/diffuse_depth]-1)*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples]) + ((\[metadata exr/arnold/specular_samples]*\[metadata exr/arnold/specular_samples]+\[metadata exr/arnold/specular_depth]-1)*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples]) + ((\[metadata exr/arnold/transmission_samples]*\[metadata exr/arnold/transmission_samples]+\[metadata exr/arnold/transmission_depth]-1)*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples]))]"
+ addUserKnob {1 ray l Ray/Pilex +INVISIBLE}
+ ray "\[expr int(\[metadata exr/arnold/stats/rays/all/pixel])]"
+ addUserKnob {1 frames l Frame +INVISIBLE}
+ frames "\[expr int(\[metadata exr/arnold/frame])]"
+ addUserKnob {1 res l Resolution +INVISIBLE}
+ res "\[expr int(\[metadata input/width])] x \[expr int(\[metadata input/height])]"
+ addUserKnob {1 mem l memory +INVISIBLE}
+ mem "\[format \"%0.2f\" \[expr \[metadata exr/arnold/stats/memory/peak]/1000]]GB"
+ addUserKnob {1 minaa l "AA_Samples Min" +INVISIBLE}
+ minaa "\[expr int(\[metadata exr/arnold/AA_samples])]"
+ addUserKnob {1 maxaa l "AA_Samples Max" +INVISIBLE}
+ maxaa "\[expr int(\[metadata exr/arnold/AA_samples]*\[expr int(\[metadata exr/arnold/AA_samples])])]"
+ addUserKnob {1 mindiff l Diffuse_Samples_Min +INVISIBLE}
+ mindiff "\[expr int(\[metadata exr/arnold/diffuse_samples])]"
+ addUserKnob {1 maxdiff l Diffuse_Samples_Max +INVISIBLE}
+ maxdiff "\[expr int((\[metadata exr/arnold/diffuse_samples]*\[metadata exr/arnold/diffuse_samples]+\[metadata exr/arnold/diffuse_depth]-1)*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples])]"
+ addUserKnob {1 minspc l Specular_Samples_Min +INVISIBLE}
+ minspc "\[expr int(\[metadata exr/arnold/specular_samples])]"
+ addUserKnob {1 maxspc l Specular_Samples_Max +INVISIBLE}
+ maxspc "\[expr int((\[metadata exr/arnold/specular_samples]*\[metadata exr/arnold/specular_samples]+\[metadata exr/arnold/specular_depth]-1)*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples])]"
+ addUserKnob {1 mintrans l Transmission_Samples_Min +INVISIBLE}
+ mintrans "\[expr int(\[metadata exr/arnold/transmission_samples])]"
+ addUserKnob {1 maxtrans l Transmission_Samples_Max +INVISIBLE}
+ maxtrans "\[expr int((\[metadata exr/arnold/transmission_samples]*\[metadata exr/arnold/transmission_samples]+\[metadata exr/arnold/transmission_depth]-1)*\[metadata exr/arnold/AA_samples]*\[metadata exr/arnold/AA_samples])]"
+ addUserKnob {1 sss l SSS_Samples +INVISIBLE}
+ sss "\[expr int(\[metadata exr/arnold/sss_samples])]"
+ addUserKnob {1 threads +INVISIBLE}
+ threads "\[metadata exr/arnold/threads]"
+ addUserKnob {1 time +INVISIBLE}
+ time "\[format \"%02d:%02d:%02d\" \[expr int(\[metadata exr/arnold/stats/time/render]/3600)] \[expr int(fmod(\[metadata exr/arnold/stats/time/render]/60,60))] \[expr int(fmod(\[metadata exr/arnold/stats/time/render],60))]]"
+ addUserKnob {68 renderlayer l "Render Layer Name" M {Character Prop ENV_All ENV_FG ENV_MG ENV_BG FX Atmos User "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {18 namecolor l color R 0 255}
+ namecolor {1 1 1}
+ addUserKnob {6 namecolor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 size l Size R 0.2 1}
+ size 0.5
+ addUserKnob {26 ""}
+ addUserKnob {1 note l Note}
+ note N/A
+ addUserKnob {26 ""}
+ addUserKnob {26 _2 l "" +STARTLINE T "(ARS) Arnold Render Samples Stats V1.0\n"}
+ addUserKnob {26 _1 l "" +STARTLINE T "Created BY Pramod.g\nhttps://pramod_pro.artstation.com/"}
+}
+ Input {
+  inputs 0
+  name InputInput
+  xpos -437
+  ypos -145
+ }
+set Nac926400 [stack 0]
+ ViewMetaData {
+  metadatafilter depth
+  name ViewMetaData
+  xpos -437
+  ypos -57
+ }
+ Text2 {
+  font_size_toolbar 100
+  font_width_toolbar 100
+  font_height_toolbar 100
+  message "****Render Stats**** \n Render Layer:- \[value renderlayer]\n Time(HMS):- \[value time]\n Threads :- \[value threads]\n Memory:- \[value mem]\n (AA)Samples :-(\[value minaa]) Max:- \[value maxaa]\n DiffuseSamples :- (\[value mindiff]) Min:- \[value mindiffu] Max:- \[value maxdiff]\n SpecularSamples :- (\[value minspc]) Min:- \[value minspec] Max:- \[value maxspc]\n Transmission :- (\[value mintrans]) Min:- \[value mintr] Max:- \[value maxtrans]\n SSS-Samples :- (\[value sss])\n Total Samples Min:- \[value tsamplesmin] Max:- \[value tsamplesmax]\n Rays/Pixel:- \[value ray]\n Frame :- \[value frames]\n Resolution :- \[value res]\n Note :- \[value note]\n\n"
+  old_message {{42 42 42 42 82 101 110 100 101 114 32 83 116 97 116 115 42 42 42 42 32 10 32 82 101 110 100 101 114 32 76 97 121 101 114 58 45 32 67 104 97 114 97 99 116 101 114 10 32 84 105 109 101 40 72 77 83 41 58 45 32 48 48 58 48 49 58 53 56 10 32 84 104 114 101 97 100 115 32 58 45 32 52 56 10 32 77 101 109 111 114 121 58 45 32 49 46 56 49 71 66 10 32 40 65 65 41 83 97 109 112 108 101 115 32 58 45 40 55 41 32 77 97 120 58 45 32 52 57 10 32 68 105 102 102 117 115 101 83 97 109 112 108 101 115 32 58 45 32 40 53 41 32 77 105 110 58 45 32 49 50 50 53 32 77 97 120 58 45 32 49 51 50 51 10 32 83 112 101 99 117 108 97 114 83 97 109 112 108 101 115 32 58 45 32 40 52 41 32 77 105 110 58 45 32 55 56 52 32 77 97 120 58 45 32 56 56 50 10 32 84 114 97 110 115 109 105 115 115 105 111 110 32 58 45 32 40 50 41 32 77 105 110 58 45 32 49 57 54 32 77 97 120 58 45 32 53 51 57 10 32 83 83 83 45 83 97 109 112 108 101 115 32 58 45 32 40 50 41 10 32 84 111 116 97 108 32 83 97 109 112 108 101 115 32 77 105 110 58 45 32 50 50 53 52 32 77 97 120 58 45 32 50 55 57 51 10 32 82 97 121 115 47 80 105 120 101 108 58 45 32 53 57 49 10 32 70 114 97 109 101 32 58 45 32 49 48 48 49 10 32 82 101 115 111 108 117 116 105 111 110 32 58 45 32 52 48 57 54 32 120 32 50 49 54 48 10 32 78 111 116 101 32 58 45 32 78 47 65 10 10}
+    }
+  old_expression_markers {{38 46 61 68 82 83 95 100 118 118 127 128 150 150 159 162 170 173 196 196 205 207 215 217 237 237 246 248 256 258 277 277 301 304 312 315 331 333 345 348 365 375 386 388}
+    }
+  box {17.5 4 4090 2158}
+  yjustify bottom
+  transforms {{0 2}
+    }
+  font_size_values {{0 100 1 100 2 100 3 100 4 100 5 100 6 100 7 100 8 100 9 100 10 100 11 100 12 100 13 100 14 100 15 100 16 100 17 100 18 100 19 100 49 100 50 100 51 100 52 100 58 100 59 100 84 100 85 100 86 100 87 100 88 100 89 100 90 100 91 100 92 100 93 100 107 100 108 100 109 100 110 100 111 100 112 100 113 100 114 100 115 100 116 100 184 100 190 100 191 100 262 100 263 100 264 100 265 100 321 100 322 100 323 100 324 100 325 100 326 100 327 100 328 100 329 100 330 100 334 100 335 100 336 100 337 100 338 100 376 100 390 100 0 100 1 100 2 100 3 100 4 100 5 100 6 100 7 100 8 100 9 100 10 100 11 100 12 100 13 100 14 100 15 100 16 100 17 100 18 100 19 100 49 100 50 100 51 100 52 100 58 100 59 100 84 100 85 100 86 100 87 100 88 100 89 100 90 100 91 100 92 100 93 100 107 100 108 100 109 100 110 100 111 100 112 100 113 100 114 100 115 100 116 100 184 100 190 100 191 100 262 100 263 100 264 100 265 100 321 100 322 100 323 100 324 100 325 100 326 100 327 100 328 100 329 100 330 100 334 100 335 100 336 100 337 100 338 100 376 100 390 100}
+    }
+  font_width_values {{0 100 1 100 2 100 3 100 4 100 5 100 6 100 7 100 8 100 9 100 10 100 11 100 12 100 13 100 14 100 15 100 16 100 17 100 18 100 19 100 49 100 50 100 51 100 52 100 58 100 59 100 84 100 85 100 86 100 87 100 88 100 89 100 90 100 91 100 92 100 93 100 107 100 108 100 109 100 110 100 111 100 112 100 113 100 114 100 115 100 116 100 184 100 190 100 191 100 262 100 263 100 264 100 265 100 321 100 322 100 323 100 324 100 325 100 326 100 327 100 328 100 329 100 330 100 334 100 335 100 336 100 337 100 338 100 376 100 390 100 0 100 1 100 2 100 3 100 4 100 5 100 6 100 7 100 8 100 9 100 10 100 11 100 12 100 13 100 14 100 15 100 16 100 17 100 18 100 19 100 49 100 50 100 51 100 52 100 58 100 59 100 84 100 85 100 86 100 87 100 88 100 89 100 90 100 91 100 92 100 93 100 107 100 108 100 109 100 110 100 111 100 112 100 113 100 114 100 115 100 116 100 184 100 190 100 191 100 262 100 263 100 264 100 265 100 321 100 322 100 323 100 324 100 325 100 326 100 327 100 328 100 329 100 330 100 334 100 335 100 336 100 337 100 338 100 376 100 390 100}
+    }
+  font_height_values {{0 100 1 100 2 100 3 100 4 100 5 100 6 100 7 100 8 100 9 100 10 100 11 100 12 100 13 100 14 100 15 100 16 100 17 100 18 100 19 100 49 100 50 100 51 100 52 100 58 100 59 100 84 100 85 100 86 100 87 100 88 100 89 100 90 100 91 100 92 100 93 100 107 100 108 100 109 100 110 100 111 100 112 100 113 100 114 100 115 100 116 100 184 100 190 100 191 100 262 100 263 100 264 100 265 100 321 100 322 100 323 100 324 100 325 100 326 100 327 100 328 100 329 100 330 100 334 100 335 100 336 100 337 100 338 100 376 100 390 100 0 100 1 100 2 100 3 100 4 100 5 100 6 100 7 100 8 100 9 100 10 100 11 100 12 100 13 100 14 100 15 100 16 100 17 100 18 100 19 100 49 100 50 100 51 100 52 100 58 100 59 100 84 100 85 100 86 100 87 100 88 100 89 100 90 100 91 100 92 100 93 100 107 100 108 100 109 100 110 100 111 100 112 100 113 100 114 100 115 100 116 100 184 100 190 100 191 100 262 100 263 100 264 100 265 100 321 100 322 100 323 100 324 100 325 100 326 100 327 100 328 100 329 100 330 100 334 100 335 100 336 100 337 100 338 100 376 100 390 100}
+    }
+  baseline_values {{0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 49 0 50 0 51 0 52 0 58 0 59 0 84 0 85 0 86 0 87 0 88 0 89 0 90 0 91 0 92 0 93 0 107 0 108 0 109 0 110 0 111 0 112 0 113 0 114 0 115 0 116 0 184 0 190 0 191 0 262 0 263 0 264 0 265 0 321 0 322 0 323 0 324 0 325 0 326 0 327 0 328 0 329 0 330 0 334 0 335 0 336 0 337 0 338 0 376 0 390 0 0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 49 0 50 0 51 0 52 0 58 0 59 0 84 0 85 0 86 0 87 0 88 0 89 0 90 0 91 0 92 0 93 0 107 0 108 0 109 0 110 0 111 0 112 0 113 0 114 0 115 0 116 0 184 0 190 0 191 0 262 0 263 0 264 0 265 0 321 0 322 0 323 0 324 0 325 0 326 0 327 0 328 0 329 0 330 0 334 0 335 0 336 0 337 0 338 0 376 0 390 0}
+    }
+  cursor_position 623
+  font {{ Arial : Regular : arial.ttf : 0 }}
+  global_font_scale {{size}}
+  leading 0.2
+  center {1024 778}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{5.5 915.5}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+    }
+  color {{namecolor} {namecolor} {namecolor} 1}
+  enable_background true
+  background_border_x 5.1
+  name Render_States
+  xpos -437
+  ypos 61
+ }
+ Dot {
+  name Dot4
+  xpos -403
+  ypos 193
+ }
+push $Nac926400
+ Dot {
+  name Dot1
+  xpos -208
+  ypos -142
+ }
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos -242
+  ypos 189
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove
+  xpos -242
+  ypos 264
+ }
+ Output {
+  name Output1
+  xpos -242
+  ypos 343
+ }
+end_group
